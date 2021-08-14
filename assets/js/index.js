@@ -3,10 +3,11 @@ $(function() {
     getUserInfo()
 
     //退出登录
-    $(".loginOut").on("click", function() {
+    $("#loginOut").on("click", function() {
+        console.log(111);
         var layer = layui.layer;
         //弹出退出登录询问框 用layer.confirm
-        layer.confirm('is not?', { icon: 3, title: '提示' }, function(index) {
+        layer.confirm('确定退出?', { icon: 3, title: '提示' }, function(index) {
             //1.清除localStorage的
             localStorage.removeItem("token");
             //2.跳转页面
@@ -35,7 +36,8 @@ function getUserInfo() {
         //     Authorization: localStorage.getItem("token") || ""
         // },
         success: function(res) {
-            if (res.status !== 0) {
+            console.log(res);
+            if (res.code !== 0) {
                 return layui.layer.msg("获取用户数据失败")
             }
             //渲染头像

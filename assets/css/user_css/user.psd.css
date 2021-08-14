@@ -1,0 +1,14 @@
+html,
+body {
+    margin: 0;
+    height: 0;
+}
+
+body {
+    padding: 5px;
+    background-color: #f2f3f5;
+}
+
+.layui-form-item {
+    width: 400px;
+}

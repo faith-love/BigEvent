@@ -17,11 +17,7 @@ $(function() {
     })
 
 
-    $("#user_info_tj").on("submit", function(e) {
-            e.preventDefault();
-            setUserInfo();
-        })
-        //初始化表单数据userinfo的初始化数据
+    //初始化表单数据userinfo的初始化数据
     function getUserInfo() {
         $.ajax({
             method: "get",
@@ -37,21 +33,23 @@ $(function() {
         })
     }
 
-
-    function setUserInfo() {
+    // 监听表单的提交事件
+    $('#user_info_tj').on('submit', function(e) {
+        // 阻止表单的默认提交行为
+        e.preventDefault()
+            // 发起 ajax 数据请求
         $.ajax({
-            method: "post",
+            method: 'PUT',
+            url: '/my/userinfo',
             data: $(this).serialize(),
-            url: "/my/userinfo",
             success: function(res) {
-                if (res.code !== 0) return layer.msg("更新用户信息失败");
-                layer.msg("更新用户信息成功");
-                //调用父页面的方法重新渲染用户名
-                //如何调用父页面的函数
+                if (res.code !== 0) {
+                    return layer.msg('更新用户信息失败！')
+                }
+                layer.msg('更新用户信息成功！')
+                    // 调用父页面中的方法，重新渲染用户的头像和用户的信息
                 window.parent.getUserInfo()
             }
-
         })
-    }
-
+    })
 })

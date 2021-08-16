@@ -1,6 +1,6 @@
 $(function() {
     $.ajaxPrefilter(function(options) {
-        options.url = 'http://www.liulongbin.top:3008' + options.url;
+        options.url = 'http://www.liulongbin.top:3007' + options.url;
 
         //在调用数据时，以/my/开头的需要加上请求头
         if (options.url.indexOf("/my/") !== -1) {
@@ -18,12 +18,6 @@ $(function() {
                 //2.跳转页面
                 location.href = '/login.html'
             }
-
-
-
         }
     })
-
-
-
 })

@@ -25,9 +25,10 @@ $(function() {
             method: "get",
             url: "/my/cate/list",
             success: function(res) {
+                console.log(res);
                 if (res.code !== 0) return layer.msg("获取分类列表失败！")
                 var htmlStr = template("tpl_pub_list", res)
-                $("#tpl_pub_list").empty().html(htmlStr);
+                $("#pub_list").empty().html(htmlStr);
                 //由于执行顺序问题，数据请求时的下拉选项需要重新渲染
                 //调用render这个方法，重新渲染页面
                 form.render()
@@ -78,23 +79,25 @@ $(function() {
             .toBlob(function(blob) { // 将 Canvas 画布上的内容，转化为文件对象
                 // 得到文件对象后，进行后续的操作
                 fd.append("cover_img", blob)
+                    //发送post数据请求
+                $.ajax({
+                    method: "post",
+                    url: "/my/article/add",
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        console.log(res);
+                        if (res.code !== 0) return layer.msg("添加文章失败！")
+                        layer.msg("添加文章成功！")
+                        window.parent.$(".article_list").click()
+                    }
+                })
 
             });
 
 
-        //发送post数据请求
-        $.ajax({
-            method: "post",
-            url: "/my/cate/add",
-            data: fd,
-            contentType: false,
-            processData: false,
-            success: function(res) {
-                if (res.code !== 0) return layer.msg("添加文章失败！")
-                layer.msg("添加文章成功！")
-                location.href = "/article/article_list.html"
-            }
-        })
+
 
     })
 

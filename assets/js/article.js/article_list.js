@@ -31,7 +31,7 @@ $(function() {
 
     //补零函数
     function padZero(date) {
-        return date > 10 ? date : "0" + date
+        return date >= 10 ? date : "0" + date
     }
 
 
@@ -41,7 +41,7 @@ $(function() {
     function initTable() {
         $.ajax({
             method: "get",
-            url: "/my/cate/list",
+            url: "/my/article/list",
             data: q,
             success: function(res) {
                 if (res.code !== 0) return layer.msg("文章列表获取失败！");
@@ -85,21 +85,17 @@ $(function() {
     function renderPage(total) {
         laypage.render({
             elem: 'pagebox', //添加分页容器，不用加 # 号
-
             count: total, //数据总数，从服务端得到
             limit: q.pagesize, //每页显示的条数
             curr: q.pagenum, //设置默认被选中的分页
             jump: function(obj, first) {
                 //obj包含了当前分页的所有参数，比如：
-                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
                 q.pagenum = obj.curr;
                 q.pagesize = obj.limit;
                 if (!first) {
                     //do something
                     initTable()
                 }
-
-
             },
             layout: ['count', 'limit', 'prev', 'page', 'next', 'skip'],
             limits: [2, 3, 5, 10]
@@ -110,19 +106,21 @@ $(function() {
 
     //删除按钮删除对应的数据
     $("tbody").on("click", ".btn_delete", function() {
+        var id = $(this).attr("data-id")
         layer.confirm('确定删除?', { icon: 3, title: '提示' }, function(index) {
             //do something 
             $.ajax({
-                method: "post",
-                url: "" + id,
+                method: "delete",
+                url: "/my/article/info?id=" + id,
                 success: function(res) {
                     if (res.code !== 0) return layer.msg("删除分类失败!")
-                    layer.msg("删除分类成功!")
-                    var btn_delete = $(".btn_delete")
-                    if (btn_delete.length === 1) {
+
+                    var btn_delete = $(".btn_delete").length
+                    if (btn_delete === 1) {
                         q.pagenum = q.pagenum === 1 ? 1 : q.pagenum - 1;
-                        initCates()
                     }
+                    initTable()
+                    layer.msg("删除分类成功!")
                 }
             })
             layer.close(index);
